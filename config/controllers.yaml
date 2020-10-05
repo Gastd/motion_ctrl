@@ -1,0 +1,33 @@
+controllers:
+
+  - name: 'base_planner'
+    type: 'base_local_planner/TrajectoryPlannerROS'
+
+  - name: 'teb_local_planner'
+    type: 'teb_local_planner/TebLocalPlannerROS'
+
+  - name: 'dwa_local_planner'
+    type: 'dwa_local_planner/DWAPlannerROS'
+    
+  # - name: 'follow_curve_planner'
+  #   type: 'follow_curve_planner/FollowCurvePlanner'
+    
+  # - name: 'voronoi_planner'
+  #   type: 'voronoi_planner/VoronoiPlanner'
+
+  # - name: 'multi_robot_follow_curve'
+  #   type: 'multi_robot_controller/MultiRobotControllerFollowCurve'
+  
+  # - name: 'rear_wheel_cubic_spline_optimized_interpolator_planner'
+  #   type: 'rear_wheel_cubic_spline_optimized_interpolator_planner/RearWheelCubicSplineOptimizedInterpolatorPlanner'
+
+  # - name: 'rear_wheel_global_planner_follower'
+  #   type: 'rear_wheel_global_planner_follower/RearWheelGlobalPlannerFollower'
+  
+  # - name: 'front_wheel_global_planner_follower'
+  #   type: 'front_wheel_global_planner_follower/FrontWheelGlobalPlannerFollower'
+
+  # - name: 'multi_robot_front_wheel'
+  #   type: 'multi_robot_controller/MultiRobotControllerFrontWheel'
+
+    

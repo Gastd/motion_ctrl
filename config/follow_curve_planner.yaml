@@ -1,0 +1,12 @@
+follow_curve_planner:
+  #Spline planner
+  look_ahead_distance: 4.5
+  distance_to_recalculate: 2.5
+  follow_curve_vel: 0.6
+  min_dist_to_obstacle: 0.0
+
+  #General reference planner
+  ref_side: 1
+  ref_dist: 0.9
+  ref_lateral_margin: 0.3
+  ref_angular_margin: 0.1

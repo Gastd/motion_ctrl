@@ -1,0 +1,20 @@
+voronoi_planner:
+  # Velocity Controller Parameters
+  K: 5.0
+  K_soft: 1.0
+  speed: 0.5
+  
+  # Cancel Parameters
+  angle_limit: 0.3        # Angle error limit to cancel planner
+  lateral_limit: 0.4      # Displacement error limit to cancel planner
+
+  # Voronoi Path Parameters
+  weight_data: 0.8
+  weight_smooth: 0.2
+
+  # Line Obstacles Parameters
+  lines_offset: 0.2         # Obstacle lines will be translated by this offset
+  min_lines_distance: 0.4   # Lines that are closer then min_lines_distance from the robor or the goal will be translated 
+
+  # Finalization Parameters
+  xy_precision: 0.5         # Distance to the goal to end the action

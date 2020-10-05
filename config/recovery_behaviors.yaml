@@ -1,0 +1,7 @@
+recovery_behaviors:
+  - name: 'conservative_reset'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  # - name: 'ahead_recovery'
+  #   type: 'ahead_recovery/AheadRecovery'
+  #- name: 'conservative_reset_2'
+  #  type: 'clear_costmap_recovery/ClearCostmapRecovery'

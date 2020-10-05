@@ -1,0 +1,21 @@
+planners:
+
+  - name: 'navfn'
+    type: 'navfn/NavfnROS'
+
+  - name: 'carrot_planner'
+    type: 'carrot_planner/CarrotPlanner'
+
+  - name: 'path_global_planner'
+    type: 'path_global_planner/PathGlobalPlanner'
+
+  # - name: 'sbpl_planner'
+  #   type: 'SBPLLatticePlanner'
+
+  # - name: 'multi_robot_planner'
+  #   type: 'multi_robot_planner/MultiRobotPlanner'
+
+  # - name: 'global_planner'
+  #   type: 'global_planner/GlobalPlanner'
+
+  

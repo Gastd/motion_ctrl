@@ -1,0 +1,44 @@
+# # http://www.ros.org/wiki/base_local_planner
+TrajectoryPlannerROS:
+# Robot Configuration Parameters
+  acc_lim_x:                    1.0
+  acc_lim_y:                    0.0
+  acc_lim_th:                   1.0
+  max_vel_x:                    1.5
+  min_vel_x:                    -0.5
+  max_rotational_vel:           0.5
+  min_in_place_rotational_vel:  -0.5
+  escape_vel:                   -0.3
+  holonomic_robot:              false
+
+# The following parameters are only used if holonomic_robot is set to true:
+  y_vels: [-0.3, -0.1, 0.1, 0.3]
+
+# Goal Tolerance Parameters
+  yaw_goal_tolerance:           0.1   # about 6 degrees
+  xy_goal_tolerance:            0.05  # 5 cm
+  latch_xy_goal_tolerance:      false #true?
+
+# Forward Simulation Parameters
+  sim_time:                     3.0 #making sure that the minimum velocity multiplied by the sim_period is less than twice my tolerance on a goal
+  sim_granularity:              0.25
+  angular_sim_granularity:      0.05
+  vx_samples:                   10
+  vtheta_samples:               20
+  # controller_frequency:       20 # set above use the same
+
+# Trajectory Scoring Parameters
+  meter_scoring:                true
+  pdist_scale:                  0.6
+  gdist_scale:                  0.8
+  occdist_scale:                0.05
+  heading_lookahead:            1.0 #0.325
+  heading_scoring:              true
+  heading_scoring_timestep:     0.8
+  dwa:                          true #choose between dwa or trajectory
+  publish_cost_grid_pc:         true
+  global_frame_id:              /odom
+ # Oscillation Prevention Parameters
+  oscillation_reset_dist:       0.05
+ # Global Plan Parameters
+  prune_plan:                   true

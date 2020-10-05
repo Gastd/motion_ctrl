@@ -1,0 +1,56 @@
+# 2D Costmap parameters 
+# http://www.ros.org/wiki/costmap_2d
+
+### Coordinate frame and tf parameters ###
+global_frame:               odom
+robot_base_frame:           base_footprint
+transform_tolerance:        2 # 0.2
+
+### Rate parameters ###
+update_frequency:           0.5
+publish_frequency:          0.5 
+max_obstacle_height:        2.0
+
+
+footprint_padding: 0
+footprint_inflation: 0
+
+# The following parameter is overwritten if the "footprint" parameter is set
+#robot_radius:               1.0
+
+### Sensor management parameters ###
+observation_sources: laser
+#observation_sources: laser_left laser pointcloud_collision
+
+#declaration of the sensors selected
+laser: { 
+  topic:                    turtlebot1/lidar,
+  sensor_frame:             base_laser_link,
+  observation_persistence:  0,
+  expected_update_rate:     2.0,
+  data_type:                LaserScan, 
+  clearing:                 true, 
+  marking:                  true, 
+  max_obstacle_height:      2.0,
+  min_obstacle_height:      0.025,
+  inf_is_valid:             true,
+  #obstacle_range:           5.0, #this is in lidar yaml
+  raytrace_range:           51.0
+}
+
+# laser_left: { 
+#   topic:                    costmap_laserscan_left, 
+#   sensor_frame:             laser_left_link, 
+#   observation_persistence:  0,
+#   expected_update_rate:     1.0,
+#   data_type:                LaserScan, 
+#   clearing:                 true, 
+#   marking:                  true, 
+#   max_obstacle_height:      2.0,
+#   min_obstacle_height:      0.0,
+#   inf_is_valid:             true,
+#   #obstacle_range:           5.0, #this is in lidar yaml
+#   raytrace_range:           51.0
+# }
+
+
