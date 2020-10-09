@@ -10,52 +10,6 @@
     <remap from="base_pose_ground_truth"    to="base_pose_ground_truth"  />
   </node>
 
-  <node pkg="mbf_simple_nav" type="mbf_simple_nav" respawn="true" name="move_base_flex" output="screen">
-      <rosparam file="$(find motion_ctrl)/config/planners.yaml" command="load" />
-    <rosparam file="$(find motion_ctrl)/config/controllers.yaml" command="load" />
-    <rosparam file="$(find motion_ctrl)/config/recovery_behaviors.yaml" command="load" />
- 
-    <rosparam file="$(find motion_ctrl)/config/common_params.yaml" command="load" />
-
-    <rosparam file="$(find motion_ctrl)/config/global_global_planner.yaml" command="load"/>
-
-
-    <rosparam file="$(find motion_ctrl)/config/teb_local_planner.yaml" command="load"/>
-  
-    <rosparam file="$(find motion_ctrl)/config/follow_curve_planner.yaml" command="load" />
-    
-    <rosparam file="$(find motion_ctrl)/config/voronoi_planner.yaml" command="load" />
-
-    <param name="sbpl_planner/primitive_filename" value="$(find motion_ctrl)/config/sbpl_mprim/rhino.mprim" />
-    <rosparam file="$(find motion_ctrl)/config/sbpl_global_params.yaml" command="load" />
-
-    <rosparam file="$(find motion_ctrl)/config/navfn_global_planner.yaml" command="load"/>
-    <rosparam file="$(find motion_ctrl)/config/dwa_local_planner.yaml" command="load"/>
-    <!--<rosparam file="$(find motion_ctrl)/config/pose_follower_local_planner.yaml" command="load"/>-->
-    <!--<rosparam file="$(find motion_ctrl)/config/trajectory_local_planner.yaml" command="load"/>-->
-
-    <!-- to get footprint -->
-    <rosparam file="$(find machine)/rhino_dimensions.yaml"  command="load" ns="global_costmap" />
-    <rosparam file="$(find machine)/rhino_dimensions.yaml"  command="load" ns="local_costmap"  />
-    
-    <rosparam file="$(find motion_ctrl)/config/costmap_common.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find motion_ctrl)/config/costmap_common.yaml" command="load" ns="global_costmap/obstacle_layer" />
-    <rosparam file="$(find motion_ctrl)/config/costmap_common.yaml" command="load" ns="global_costmap/inflation_layer" />
-
-    <rosparam file="$(find motion_ctrl)/config/costmap_common.yaml" command="load" ns="local_costmap"  />
-    <rosparam file="$(find motion_ctrl)/config/costmap_common.yaml" command="load" ns="local_costmap/obstacle_layer" />
-    <rosparam file="$(find motion_ctrl)/config/costmap_common.yaml" command="load" ns="local_costmap/inflation_layer" />
-
-    <rosparam file="$(find motion_ctrl)/config/costmap_global.yaml" command="load" />
-    <rosparam file="$(find motion_ctrl)/config/costmap_local.yaml"  command="load"/> 
-
-
-    <rosparam file="$(find motion_ctrl)/config/costmap_convert_params.yaml" command="load" />
-
-    <remap from="cmd_vel"               to="turtlebot1/cmd_vel"  />
-    <remap from="move_base_flex/voronoi_planner/secondary_virtual_lines"    to="stage_vision/lines"  />
-    <!-- <remap from="move_base_flex/current_goal"    to="move_base_simple/goal"  /> -->
- 
-  </node>
+  <include file="$(find turtlebot3_hospital_sim)/launch/move_base.launch" />
 
 </launch>
