@@ -24,7 +24,7 @@ observation_sources: laser
 
 #declaration of the sensors selected
 laser: { 
-  topic:                    turtlebot1/lidar,
+  topic:                    lidar,
   sensor_frame:             base_laser_link,
   observation_persistence:  0,
   expected_update_rate:     2.0,

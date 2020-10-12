@@ -11,7 +11,7 @@ local_costmap:
     footprint_clearing_enabled: true
   
  ### Map management parameters ### 
-  static_map:             false  
+  static_map:             false
   rolling_window:         true
   unknown_cost_value:     0
   publish_voxel_map:      true
