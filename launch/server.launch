@@ -5,7 +5,7 @@
   <arg name="ns"  default="/"/>
   <param name="/use_sim_time" value="true"/>
   
-  <node name="master_discovery" pkg="fkie_master_discovery" type="master_discovery" output="screen" ns="$(arg ns)">
+  <node name="master_discovery" pkg="master_discovery_fkie" type="master_discovery" output="screen" ns="$(arg ns)">
     <param name="log_level" value="INFO" />
     <!-- Specifies the multicast group. You can bind the to defined interface by adding @address to the group -->
     <param name="mcast_group" value="226.0.0.0" />
@@ -44,7 +44,7 @@
     <param name="listen_mcast" value="True" />
   </node>
 
-  <node name="master_sync" pkg="fkie_master_sync" type="master_sync" ns="$(arg ns)" >
+  <node name="master_sync" pkg="master_sync_fkie" type="master_sync" ns="$(arg ns)" >
     <!-- Performs resync after the host was offline: unregister and register again to avoid connection losses to python topic. These does not suppot reconnection! -->
     <param name="resync_on_reconnect" value="True" />
     <!-- A configurable period that controls how long the offline-online period [sec] is before the resync kicks in.
