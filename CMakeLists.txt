@@ -8,7 +8,9 @@ project(motion_ctrl)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  # move_base_flex
+  roscpp
+  actionlib
+  move_base
 )
 
 ## System dependencies are found with CMake's conventions
@@ -122,6 +124,9 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/motion_ctrl.cpp
 # )
+
+add_executable(send_goals src/send_goals.cpp)
+target_link_libraries(send_goals ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
