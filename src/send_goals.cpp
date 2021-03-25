@@ -34,10 +34,10 @@ void sendGoalToMoveBase(const geometry_msgs::PoseStamped::ConstPtr& msg)
 int main(int argc, char** argv) {
   ros::init(argc, argv, "simple_navigation_goals");
   ros::NodeHandle n;
-  MoveBaseClient ac("turtlebot1/move_base", true);
+  MoveBaseClient ac("move_base", true);
   acp = &ac;
 
-  ros::Subscriber sub = n.subscribe("turtlebot1/send_goal", 1000, sendGoalToMoveBase);
+  ros::Subscriber sub = n.subscribe("send_goal", 1000, sendGoalToMoveBase);
 
   //wait for the action server to come up
   while(!acp->waitForServer(ros::Duration(5.0))){

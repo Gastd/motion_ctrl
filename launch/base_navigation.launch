@@ -13,6 +13,8 @@
       <param name="turtle" value="$(arg robot)" />
     </node>
 
+    <node pkg="motion_ctrl" type="send_goals" respawn="true" name="send_goals" output="screen" />
+
     <node pkg="fake_localization" type="fake_localization" respawn="true" name="fake_localization" output="screen">
       <param name="base_frame_id" value="base_footprint" />
       <remap from="base_pose_ground_truth"    to="base_pose_ground_truth"  />
