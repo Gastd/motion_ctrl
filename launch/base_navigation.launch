@@ -21,6 +21,7 @@
     </node>
 
     <include file="$(find turtlebot3_hospital_sim)/launch/move_base.launch" />
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
    <!--  <node type="rviz" name="rviz" pkg="rviz" >
       <remap from="/move_base_simple/goal"    to="/$(arg robot)/move_base_simple/goal"  />
     </node> -->
