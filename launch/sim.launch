@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <launch>
   <param name="robot_description" command="cat $(find motion_ctrl)/robots/turtlebot.urdf" />
+  <node name="map_server_visu" pkg="map_server" type="map_server" args="$(find motion_ctrl)/maps/hospital.yaml" >
+  	<remap from="map" to="static_map"/>
+  </node>
   <node name="map_server" pkg="map_server" type="map_server" args="$(find motion_ctrl)/maps/map.yaml" />
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
