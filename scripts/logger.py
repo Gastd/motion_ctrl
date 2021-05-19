@@ -59,7 +59,9 @@ def listener():
     n_robots = int(os.environ['N_ROBOTS'])
     robot_subs = []
     rospy.loginfo("Initializing simulation logger...")
-    with open(log_path, "a+") as myfile:
+    with open(log_path, "w") as myfile:
+        myfile.write('Simulation open at ' + str(rospy.get_rostime()))
+        myfile.write('\n')
         for i in range(1, n_robots+1):
             robot_name = os.environ['ROBOT_NAME_'+str(i)]
             # robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
@@ -70,7 +72,7 @@ def listener():
             rospy.loginfo(str(myfile))
             robot_subs.append(robot)
 
-    nurse_sub = rospy.Subscriber("/nurse/log", String, callback_log)
+    nurse_sub = rospy.Subscriber("/log", String, callback_log)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

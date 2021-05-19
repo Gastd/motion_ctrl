@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="robot_name" default="$(env ROBOT_NAME)"/>
   <param name="robot_description" command="cat $(find motion_ctrl)/robots/turtlebot.urdf" />
+  <param name="/use_sim_time" value="true" />
   <node name="map_server_visu" pkg="map_server" type="map_server" args="$(find motion_ctrl)/maps/hospital.yaml" >
   	<remap from="map" to="static_map"/>
   </node>
   <node name="map_server" pkg="map_server" type="map_server" args="$(find motion_ctrl)/maps/map.yaml" />
 
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+  	<param name="tf_prefix" value="$(arg robot_name)"/>
+  </node>
 
 </launch>

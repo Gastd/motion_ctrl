@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <launch>  
   <!-- Move Base Flex -->
-  <arg name="robot" default="$(env ROBOT_NAME)"/>
+  <arg name="robot_name" default="$(env ROBOT_NAME)"/>
   <arg name="project" default="motion_ctrl"/>
-  <!-- <param name="/use_sim_time" value="true"/> -->
+  <param name="/use_sim_time" value="true"/>
   
-  <group ns="$(arg robot)">
+  <group ns="$(arg robot_name)">
     <include file="$(find motion_ctrl)/launch/sim.launch" />
-    <include file="$(find motion_ctrl)/launch/server.launch" />
+    <!-- <include file="$(find motion_ctrl)/launch/server.launch" /> -->
   
     <node pkg="motion_ctrl" type="turtle_tf_broadcaster.py" respawn="true" name="turtle_tf_broadcaster" output="screen">
-      <param name="turtle" value="$(arg robot)" />
+      <param name="turtle" value="$(arg robot_name)" />
     </node>
 
     <node pkg="motion_ctrl" type="send_goals" respawn="true" name="send_goals" output="screen" />
@@ -18,12 +18,15 @@
     <node pkg="motion_ctrl" type="logger.py" respawn="true" name="logger" output="screen" />
 
     <node pkg="fake_localization" type="fake_localization" respawn="true" name="fake_localization" output="screen">
-      <param name="base_frame_id" value="base_footprint" />
-      <remap from="base_pose_ground_truth"    to="base_pose_ground_truth"  />
+      <param name="odom_frame_id" value="$(arg robot_name)/odom" />
+      <param name="base_frame_id" value="$(arg robot_name)/base_footprint" />
+      <param name="global_frame_id" value="/map"/>
+      <remap from="base_pose_ground_truth"    to="/$(arg robot_name)/base_pose_ground_truth"  />
     </node>
+    <!-- <node pkg="tf" type="static_transform_publisher" name="map2odom" args="0 0 0 0 0 0 /map $(arg robot_name)/odom 100"/> -->
 
     <include file="$(find turtlebot3_hospital_sim)/launch/move_base.launch" />
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+    <!-- <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" /> -->
    <!--  <node type="rviz" name="rviz" pkg="rviz" >
       <remap from="/move_base_simple/goal"    to="/$(arg robot)/move_base_simple/goal"  />
     </node> -->
