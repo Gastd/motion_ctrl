@@ -5,7 +5,7 @@
   <arg name="project" default="motion_ctrl"/>
   <param name="/use_sim_time" value="true"/>
   
-  <node pkg="motion_ctrl" type="logger.py" respawn="true" name="logger" output="screen" />
+  <node pkg="motion_ctrl" type="logger.py"name="logger" output="screen" />
   <group ns="$(arg robot_name)">
     <include file="$(find motion_ctrl)/launch/sim.launch" />
     <!-- <include file="$(find motion_ctrl)/launch/server.launch" /> -->
