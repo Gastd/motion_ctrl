@@ -12,8 +12,14 @@ log_file = None
 log_path = ""
 simulation_init_time = 0.0
 
+def formatlog(loginfo, severity):
+    global simulation_init_time
+    return (str(rospy.get_time() - simulation_init_time) + 
+               ',['+severity+'],'+
+               loginfo)
+
 def callback_log(data):
-    global log_path
+    global log_path, simulation_init_time
     # add time since simulation init into the log
     data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
     with open(log_path, "a+") as myfile:
