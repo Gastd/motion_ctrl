@@ -60,19 +60,22 @@ def listener():
     robot_subs = []
     rospy.loginfo("Initializing simulation logger...")
     with open(log_path, "w") as myfile:
-        myfile.write('Simulation open at ' + str(rospy.get_rostime()))
+        myfile.write('logger,'+str(rospy.get_rostime())+',Simulation open')
         myfile.write('\n')
-        for i in range(1, n_robots+1):
-            robot_name = os.environ['ROBOT_NAME_'+str(i)]
-            # robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
-            robot = rospy.Subscriber("/"+robot_name+"/log", String, callback_log)
-            # robot.add_to_simulation(x=float(robot_pose[0]), y=float(robot_pose[1]))
-            myfile.write("Subcribing to "+robot_name+" in the toppic "+"/"+robot_name+"/log")
-            myfile.write('\n')
-            rospy.loginfo(str(myfile))
-            robot_subs.append(robot)
+        # for i in range(1, n_robots+1):
+        #     robot_name = os.environ['ROBOT_NAME_'+str(i)]
+        #     # robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
+        #     robot = rospy.Subscriber("/"+robot_name+"/log", String, callback_log)
+        #     # robot.add_to_simulation(x=float(robot_pose[0]), y=float(robot_pose[1]))
+        #     myfile.write("Subcribing to "+robot_name+" in the topic "+"/"+robot_name+"/log")
+        #     myfile.write('\n')
+        #     rospy.loginfo(str(myfile))
+        #     robot_subs.append(robot)
+        nurse_sub = rospy.Subscriber("/log", String, callback_log)
+        myfile.write('logger,'+str(rospy.get_rostime())+",Subcribing to in the topic /log")
+        myfile.write('\n')
+        robot_subs.append(nurse_sub)
 
-    nurse_sub = rospy.Subscriber("/log", String, callback_log)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

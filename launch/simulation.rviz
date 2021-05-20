@@ -28,7 +28,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -59,13 +59,41 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        lab_arm/base_footprint:
+          Value: true
+        lab_arm/odom:
+          Value: true
+        map:
+          Value: true
+        turtlebot1/base_footprint:
+          Value: true
+        turtlebot1/base_laser_link:
+          Value: true
+        turtlebot1/base_link:
+          Value: true
+        turtlebot1/caster_back_link:
+          Value: true
+        turtlebot1/imu_link:
+          Value: true
+        turtlebot1/odom:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        map:
+          {}
+        turtlebot1/odom:
+          turtlebot1/base_footprint:
+            turtlebot1/base_link:
+              turtlebot1/base_laser_link:
+                {}
+              turtlebot1/caster_back_link:
+                {}
+              turtlebot1/imu_link:
+                {}
       Update Interval: 0
       Value: true
     - Class: rviz/Group
@@ -160,12 +188,12 @@ Visualization Manager:
           Class: rviz/Map
           Color Scheme: costmap
           Draw Behind: false
-          Enabled: false
+          Enabled: true
           Name: GlobalCostmap
           Topic: /turtlebot1/move_base/global_costmap/costmap
           Unreliable: false
           Use Timestamp: false
-          Value: false
+          Value: true
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
@@ -261,7 +289,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0
+      Angle: -0.004999999888241291
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -271,11 +299,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 64.16670989990234
+      Scale: 120.72144317626953
       Target Frame: turtlebot1/base_footprint
       Value: TopDownOrtho (rviz)
-      X: 0
-      Y: 0
+      X: 0.18589575588703156
+      Y: -0.7408826351165771
     Saved: ~
 Window Geometry:
   Displays:

@@ -3,6 +3,7 @@
 #include <actionlib/client/simple_action_client.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <string>
+#include <iostream>
 #include "std_msgs/String.h"
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
@@ -31,18 +32,23 @@ void sendGoalToMoveBase(const geometry_msgs::PoseStamped::ConstPtr& msg)
 
   acp->waitForResult();
 
+  std_msgs::String log_str;
   if(acp->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
   {
     std_msgs::String done;
     done.data = "Done";
-    ROS_INFO_STREAM("Hooray, the base moved "<< msg->pose.position.x << " meter forward");
+    ROS_INFO_STREAM("Hooray, the base moved "<< msg->pose.position.x << "," << msg->pose.position.y << " meter forward");
+    log_str.data = std::getenv("ROBOT_NAME") + "," +std::to_string(ros::Time::now().toSec())+",robot arrived at ("+std::string(msg->pose.position.x)+";"+std::string(msg->pose.position.y)+")";
+    log_pub.publish(log_str);
     feedback_pub.publish(done);
   }
   else
   {
     std_msgs::String done;
     done.data = "Fail";
-    ROS_INFO_STREAM("The base failed to move forward "<< msg->pose.position.x << " meter for some reason");
+    ROS_INFO_STREAM("The base failed to move forward "<< msg->pose.position.x << "," << msg->pose.position.y << " meter for some reason");
+    log_str.data = std::getenv("ROBOT_NAME") + "," +std::to_string(ros::Time::now().toSec())+",robot arrived at ("+std::string(msg->pose.position.x)+";"+std::string(msg->pose.position.y)+")";
+    log_pub.publish(log_str);
     feedback_pub.publish(done);
   }
 }
@@ -61,16 +67,16 @@ int main(int argc, char** argv) {
   std_msgs::String log_str;
   while(!acp->waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the move_base action server to come up");
-    log_str.data = "Waiting for the move_base action server to come up";
+    log_str.data = std::getenv("ROBOT_NAME") + "," +std::to_string(ros::Time::now().toSec())+",Waiting for the move_base action server to come up";
     log_pub.publish(log_str);
   }
 
-  log_str.data = "Move_base is up and ok....";
+  log_str.data = std::getenv("ROBOT_NAME") + "," +std::to_string(ros::Time::now().toSec())+",Move_base is up and ok....";
   log_pub.publish(log_str);
-  log_str.data = "STARTSIM";
+  log_str.data = std::getenv("ROBOT_NAME") + "," +std::to_string(ros::Time::now().toSec())+",STARTSIM";
   log_pub.publish(log_str);
-  log_str.data = std::to_string(ros::Time::now().toSec());
-  log_pub.publish(log_str);
+  // log_str.data = std::to_string(ros::Time::now().toSec());
+  // log_pub.publish(log_str);
 
   ros::spin();
 
