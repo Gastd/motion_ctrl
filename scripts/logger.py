@@ -56,7 +56,7 @@ def listener():
     # log_file = open(log_path, "a+")
 
     # open file to log all received data
-    n_robots = int(os.environ['N_ROBOTS'])
+    # n_robots = int(os.environ['N_ROBOTS'])
     robot_subs = []
     rospy.loginfo("Initializing simulation logger...")
     with open(log_path, "w") as myfile:
