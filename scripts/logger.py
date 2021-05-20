@@ -10,9 +10,12 @@ angular_sum = 0
 n_angular = 0
 log_file = None
 log_path = ""
+simulation_init_time = 0.0
 
 def callback_log(data):
     global log_path
+    # add time since simulation init into the log
+    data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
     with open(log_path, "a+") as myfile:
         rospy.loginfo(data.data)
         myfile.write(data.data)
@@ -40,7 +43,7 @@ def listener():
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
-    global log_path
+    global log_path, simulation_init_time
 
     rospy.loginfo("Setting logger...")
     current_path = os.getcwd() + "/logger_sim"
@@ -72,10 +75,19 @@ def listener():
         #     rospy.loginfo(str(myfile))
         #     robot_subs.append(robot)
         nurse_sub = rospy.Subscriber("/log", String, callback_log)
-        myfile.write('logger,'+str(rospy.get_rostime())+",Subcribing to in the topic /log")
+        myfile.write(str(rospy.get_time())+',[debug],logger,init,subcribing to in the topic /log')
         myfile.write('\n')
         robot_subs.append(nurse_sub)
 
+
+    # hold node until /clock is initialized
+    while rospy.get_time() == 0:
+        pass
+
+    simulation_init_time = rospy.get_time() # time in secs
+    data = String()
+    data.data = str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,time'
+    callback_log(data)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
