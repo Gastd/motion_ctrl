@@ -3,7 +3,7 @@
 #include <actionlib/client/simple_action_client.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <string>
-#include <stringstream>
+#include <sstream>
 #include <iostream>
 #include "std_msgs/String.h"
 
