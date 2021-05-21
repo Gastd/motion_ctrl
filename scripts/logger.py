@@ -68,6 +68,16 @@ def listener():
     # n_robots = int(os.environ['N_ROBOTS'])
     robot_subs = []
     rospy.loginfo("Initializing simulation logger...")
+    # hold node until /clock is initialized
+    while rospy.get_time() == 0:
+        rospy.logwarn("Waiting for clock...")
+        rospy.sleep(0.1)
+    
+    simulation_init_time = rospy.get_time() # time in secs
+    data = String()
+    data.data = str(rospy.get_time() - simulation_init_timesimulation_init_time)+',[debug],logger,init,time'
+    callback_log(data)
+    
     with open(log_path, "w") as myfile:
         myfile.write('logger,'+str(rospy.get_rostime())+',Simulation open')
         myfile.write('\n')
@@ -81,20 +91,9 @@ def listener():
         #     rospy.loginfo(str(myfile))
         #     robot_subs.append(robot)
         nurse_sub = rospy.Subscriber("/log", String, callback_log)
-        myfile.write(str(rospy.get_time())+',[debug],logger,init,subcribing to in the topic /log')
+        myfile.write(str(rospy.get_time() - simulation_init_timesimulation_init_time)+',[debug],logger,init,subcribing to in the topic /log')
         myfile.write('\n')
         robot_subs.append(nurse_sub)
-
-
-    # hold node until /clock is initialized
-    while rospy.get_time() == 0:
-        rospy.logwarn("Waiting for clock...")
-        rospy.sleep(5.0)
-
-    simulation_init_time = rospy.get_time() # time in secs
-    data = String()
-    data.data = str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,time'
-    callback_log(data)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
