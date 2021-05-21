@@ -88,7 +88,8 @@ def listener():
 
     # hold node until /clock is initialized
     while rospy.get_time() == 0:
-        pass
+        rospy.logwarn("Waiting for clock...")
+        rospy.sleep(5.0)
 
     simulation_init_time = rospy.get_time() # time in secs
     data = String()
