@@ -64,7 +64,7 @@ void sendGoalToMoveBase(const geometry_msgs::PoseStamped::ConstPtr& msg)
     ssSkill <<"Hooray, the base moved arrived";
     ssParams << "(x="<< msg->pose.position.x << ";y=" << msg->pose.position.y << ")";
     // log_str.data = std::getenv("ROBOT_NAME") + std::string(",") +std::to_string(ros::Time::now().toSec())+std::string(",robot arrived at (")+std::to_string(msg->pose.position.x)+std::string(";")+std::to_string(msg->pose.position.y)+std::string(")");
-    log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", ssSkill, ssParams);
+    log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", ssSkill.str(), ssParams.str());
     log_pub.publish(log_str);
     feedback_pub.publish(done);
   }
@@ -73,10 +73,10 @@ void sendGoalToMoveBase(const geometry_msgs::PoseStamped::ConstPtr& msg)
     std_msgs::String done;
     done.data = "Fail";
     ROS_INFO_STREAM("The base failed to move forward "<< msg->pose.position.x << "," << msg->pose.position.y << " meter for some reason");
-    log_str.data = std::getenv("ROBOT_NAME") + std::string(",") +std::to_string(ros::Time::now().toSec())+std::string(",robot arrived at (")+std::to_string(msg->pose.position.x)+std::string(";")+std::to_string(msg->pose.position.y)+std::string(")");
+    // log_str.data = std::getenv("ROBOT_NAME") + std::string(",") +std::to_string(ros::Time::now().toSec())+std::string(",robot arrived at (")+std::to_string(msg->pose.position.x)+std::string(";")+std::to_string(msg->pose.position.y)+std::string(")");
     ssSkill <<"The base failed to move ";
     ssParams << "(x="<< msg->pose.position.x << ";y=" << msg->pose.position.y << ")";
-    log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", ssSkill, ssParams);
+    log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", ssSkill.str(), ssParams.str());
     log_pub.publish(log_str);
     feedback_pub.publish(done);
   }

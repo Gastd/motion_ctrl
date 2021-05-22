@@ -22,8 +22,8 @@ def callback_log(data):
     global log_path, simulation_init_time
     # add time since simulation init into the log
     data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
+    rospy.loginfo(data.data)
     with open(log_path, "a+") as myfile:
-        rospy.loginfo(data.data)
         myfile.write(data.data)
         myfile.write('\n')
     # global linear_sum
@@ -75,7 +75,7 @@ def listener():
     
     simulation_init_time = rospy.get_time() # time in secs
     data = String()
-    data.data = str(rospy.get_time() - simulation_init_timesimulation_init_time)+',[debug],logger,init,time'
+    data.data = str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,time'
     callback_log(data)
     
     with open(log_path, "w") as myfile:
@@ -91,7 +91,7 @@ def listener():
         #     rospy.loginfo(str(myfile))
         #     robot_subs.append(robot)
         nurse_sub = rospy.Subscriber("/log", String, callback_log)
-        myfile.write(str(rospy.get_time() - simulation_init_timesimulation_init_time)+',[debug],logger,init,subcribing to in the topic /log')
+        myfile.write(str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,subcribing to in the topic /log')
         myfile.write('\n')
         robot_subs.append(nurse_sub)
 
