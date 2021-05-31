@@ -80,16 +80,15 @@ Visualization Manager:
       Show Names: false
       Tree:
         map:
-          {}
-        turtlebot1/odom:
-          turtlebot1/base_footprint:
-            turtlebot1/base_link:
-              turtlebot1/base_laser_link:
-                {}
-              turtlebot1/caster_back_link:
-                {}
-              turtlebot1/imu_link:
-                {}
+          turtlebot1/odom:
+            turtlebot1/base_footprint:
+              turtlebot1/base_link:
+                turtlebot1/base_laser_link:
+                  {}
+                turtlebot1/caster_back_link:
+                  {}
+                turtlebot1/imu_link:
+                  {}
       Update Interval: 0
       Value: true
     - Class: rviz/Group
@@ -295,7 +294,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 118.60725402832031
+      Scale: 192.83035278320312
       Target Frame: turtlebot1/base_footprint
       Value: TopDownOrtho (rviz)
       X: 0

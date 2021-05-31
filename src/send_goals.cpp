@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
 
   ros::Subscriber sub = n.subscribe("send_goal", 1000, sendGoalToMoveBase);
   feedback_pub = n.advertise<std_msgs::String>("mb_feedback", 1000);
-  log_pub = n.advertise<std_msgs::String>("/log", 1000);
+  log_pub = n.advertise<std_msgs::String>("/log", 1000, true);
 
   //wait for the action server to come up
   std_msgs::String log_str;
