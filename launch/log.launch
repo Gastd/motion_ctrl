@@ -4,5 +4,5 @@
   <param name="/use_sim_time" value="true"/>
   
   <node pkg="motion_ctrl" type="logger.py" name="logger" output="screen" />
-  <node pkg="rosbag" type="record" name="record" output="screen" args="-a -o /root/.ros/logger_sim/"/>
+  <node pkg="rosbag" type="record" name="record" output="screen" args="-a -o /root/.ros/logger_sim/trial$(env TRIAL)"/>
 </launch>
