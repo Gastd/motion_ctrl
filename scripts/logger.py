@@ -79,7 +79,9 @@ def listener():
     data.data = str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,time'
     callback_log(data)
     
-    with open(log_path, "w") as myfile:
+    with open(log_path, "a+") as myfile:
+        myfile.write("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG'])
+        myfile.write("NURSES_CONFIG="+os.environ['NURSES_CONFIG'])
         myfile.write('logger,'+str(rospy.get_rostime())+',Simulation open')
         myfile.write('\n')
         # for i in range(1, n_robots+1):
