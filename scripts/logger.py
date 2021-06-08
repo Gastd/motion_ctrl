@@ -80,8 +80,8 @@ def listener():
     callback_log(data)
     
     with open(log_path, "a+") as myfile:
-        myfile.write("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG'])
-        myfile.write("NURSES_CONFIG="+os.environ['NURSES_CONFIG'])
+        myfile.write("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG']+'\n')
+        myfile.write("NURSES_CONFIG="+os.environ['NURSES_CONFIG']+'\n')
         myfile.write('logger,'+str(rospy.get_rostime())+',Simulation open')
         myfile.write('\n')
         # for i in range(1, n_robots+1):
