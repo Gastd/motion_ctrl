@@ -30,18 +30,16 @@ def formatlog(loginfo, severity):
                loginfo)
 
 def check_timeout(event):
-    global simulation_timeout_s, simulation_init_time, log_path
+    global simulation_timeout_s, simulation_init_time, logger
     if (rospy.get_time() - simulation_init_time) > simulation_timeout_s:
-        with open(log_path, "a+") as myfile:
-            myfile.write('ENDTIMEOUTSIM')
-            myfile.write('\n')
+        logger.log('ENDTIMEOUTSIM', 'logger', level=LogLevel.DEBUG)
 
 def callback_log(data):
     global log_path, simulation_init_time, logger
     # add time since simulation init into the log
-    data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
+    # data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
     rospy.loginfo(data.data)
-    logger.log(data.data, entity=data._connection_header['callerid'], level=LogLevel.DEBUG)
+    logger.log(data.data, entity=data._connection_header['callerid'], level=LogLevel.INFO)
     # global linear_sum
     # global n_linear
     # global angular_sum
@@ -101,11 +99,12 @@ def listener():
     logger.log('Simulation open', entity='logger', level=LogLevel.DEBUG)
     logger.log('subcribing to in the topic /log', entity='logger', level=LogLevel.DEBUG)
 
-    rate = rospy.Rate(10) # 10hz
+    rate = rospy.Rate(1/10) # 0.1 hz
     while not rospy.is_shutdown():
         # hello_str = "hello world %s" % rospy.get_time()
         # rospy.loginfo(hello_str)
         # pub.publish(hello_str)
+        logger.flush()
         rate.sleep()
 
     logger.log('end!')
