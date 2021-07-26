@@ -46,7 +46,7 @@ class LogWriter:
             except Exception as e:
                 print("{} already exists".format(dir_path))
 
-        self.file = open(self.file_path, 'w')
+        self.file = open(self.file_path, 'a')
         return self
   
     def __exit__(self, exception_type, exception_value, traceback):
