@@ -3,6 +3,7 @@ import os
 import rospy
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
+from loggerbib import Logger, LogWriter, ContextualLogger, LogDir, LogLevel
 
 linear_sum = 0
 n_linear = 0
@@ -12,6 +13,14 @@ log_file = None
 log_path = ""
 simulation_init_time = 0.0
 
+class RosTimer():
+    def now(self):
+        return rospy.get_time() - simulation_init_time
+
+rostimer = RosTimer()
+logwriter = None
+logger = None
+
 def formatlog(loginfo, severity):
     global simulation_init_time
     return (str(rospy.get_time() - simulation_init_time) + 
@@ -19,13 +28,11 @@ def formatlog(loginfo, severity):
                loginfo)
 
 def callback_log(data):
-    global log_path, simulation_init_time
+    global log_path, simulation_init_time, logger
     # add time since simulation init into the log
     data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
     rospy.loginfo(data.data)
-    with open(log_path, "a+") as myfile:
-        myfile.write(data.data)
-        myfile.write('\n')
+    logger.log(data.data, entity=data._connection_header['callerid'], level=LogLevel.DEBUG)
     # global linear_sum
     # global n_linear
     # global angular_sum
@@ -49,7 +56,7 @@ def listener():
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
-    global log_path, simulation_init_time
+    global log_path, simulation_init_time, logger, logwriter
 
     rospy.loginfo("Setting logger...")
     current_path = os.getcwd() + "/logger_sim"
@@ -61,8 +68,9 @@ def listener():
     else:
         print ("Successfully created the directory %s" % current_path)
         rospy.loginfo ("Successfully created the directory %s" % current_path)
-    log_path = current_path + "/experiment.log"
-    # log_file = open(log_path, "a+")
+    log_path = current_path + "/trial.log"
+    logwriter = LogWriter(log_path)
+    logger = Logger(logwriter, rostimer)
 
     # open file to log all received data
     # n_robots = int(os.environ['N_ROBOTS'])
@@ -78,27 +86,24 @@ def listener():
     data = String()
     data.data = str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,time'
     callback_log(data)
-    
-    with open(log_path, "a+") as myfile:
-        myfile.write("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG']+'\n')
-        myfile.write("NURSES_CONFIG="+os.environ['NURSES_CONFIG']+'\n')
-        myfile.write('logger,'+str(rospy.get_rostime())+',Simulation open')
-        myfile.write('\n')
-        # for i in range(1, n_robots+1):
-        #     robot_name = os.environ['ROBOT_NAME_'+str(i)]
-        #     # robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
-        #     robot = rospy.Subscriber("/"+robot_name+"/log", String, callback_log)
-        #     # robot.add_to_simulation(x=float(robot_pose[0]), y=float(robot_pose[1]))
-        #     myfile.write("Subcribing to "+robot_name+" in the topic "+"/"+robot_name+"/log")
-        #     myfile.write('\n')
-        #     rospy.loginfo(str(myfile))
-        #     robot_subs.append(robot)
-        myfile.write(str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,subcribing to in the topic /log')
-        myfile.write('\n')
-        robot_subs.append(nurse_sub)
+
+    logger.log("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG'], entity='logger', level=LogLevel.DEBUG)
+    logger.log("NURSES_CONFIG="+os.environ['NURSES_CONFIG'], entity='logger', level=LogLevel.DEBUG)
+    logger.log('Simulation open', entity='logger', level=LogLevel.DEBUG)
+    logger.log('subcribing to in the topic /log', entity='logger', level=LogLevel.DEBUG)
+
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        # hello_str = "hello world %s" % rospy.get_time()
+        # rospy.loginfo(hello_str)
+        # pub.publish(hello_str)
+        rate.sleep()
+
+    logger.log('end!')
+    logger.flush()
 
     # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+    # rospy.spin()
 
 if __name__ == '__main__':
     listener()
