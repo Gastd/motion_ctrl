@@ -12,6 +12,8 @@ n_angular = 0
 log_file = None
 log_path = ""
 simulation_init_time = 0.0
+simulation_timeout_min = 15
+simulation_timeout_s = simulation_timeout_min*60
 
 class RosTimer():
     def now(self):
@@ -26,6 +28,13 @@ def formatlog(loginfo, severity):
     return (str(rospy.get_time() - simulation_init_time) + 
                ',['+severity+'],'+
                loginfo)
+
+def check_timeout(event):
+    global simulation_timeout_s, simulation_init_time, log_path
+    if (rospy.get_time() - simulation_init_time) > simulation_timeout_s:
+        with open(log_path, "a+") as myfile:
+            myfile.write('ENDTIMEOUTSIM')
+            myfile.write('\n')
 
 def callback_log(data):
     global log_path, simulation_init_time, logger
@@ -101,6 +110,7 @@ def listener():
 
     logger.log('end!')
     logger.flush()
+    rospy.Timer(rospy.Duration(1), check_timeout)
 
     # spin() simply keeps python from exiting until this node is stopped
     # rospy.spin()
