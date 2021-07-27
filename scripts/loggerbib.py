@@ -35,7 +35,7 @@ class LogWriter:
     # def write(self, log_entry: LogEntry):
     def write(self, log_entry):
         # format log
-        text = '{0:2d}, {}, {}, {}\n'.format(log_entry.time, log_entry.log_level.value, log_entry.entity, log_entry.content)
+        text = '{:02.2f}, {}, {}, {}\n'.format(log_entry.time, log_entry.log_level.value, log_entry.entity, log_entry.content)
         self.file.write(text)
             
     def __enter__(self):
@@ -53,7 +53,6 @@ class LogWriter:
         self.file.close()
         if exception_type:
             print(exception_type, exception_value, traceback)
-        
 
 class Logger:
     '''  

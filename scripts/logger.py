@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import os
+import json
 import rospy
+import unicodedata
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 from loggerbib import Logger, LogWriter, ContextualLogger, LogDir, LogLevel
+import roslib.message
 
 linear_sum = 0
 n_linear = 0
@@ -39,7 +42,19 @@ def callback_log(data):
     # add time since simulation init into the log
     # data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
     rospy.loginfo(data.data)
-    logger.log(data.data, entity=data._connection_header['callerid'], level=LogLevel.INFO)
+    try:
+        logdata = json.loads(data.data)
+        level_map = {
+            'info': LogLevel.INFO,
+            'debug': LogLevel.DEBUG
+        }
+        rospy.loginfo('content = {}'.format(logdata['content']))
+        # content = unicodedata.normalize('NFKD', '{}'.format(logdata['content'])).encode('ascii', 'ignore')
+        logger.log(json.dumps(logdata['content']), entity=logdata['entity'], level=level_map[logdata['level']])
+    except Exception as e:
+        rospy.logerr(e)
+        logger.log(data.data)
+
     # global linear_sum
     # global n_linear
     # global angular_sum
@@ -89,17 +104,22 @@ def listener():
         rospy.logwarn("Waiting for clock...")
         rospy.sleep(0.1)
     
+    rospy.Timer(rospy.Duration(1), check_timeout)
     simulation_init_time = rospy.get_time() # time in secs
-    data = String()
-    data.data = str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,time'
-    callback_log(data)
+    # data = String()
+    # data.data = str(rospy.get_time() - simulation_init_time)+',[debug],logger,init,time'
+    # callback_log(data)
 
     logger.log("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG'], entity='logger', level=LogLevel.DEBUG)
+    rospy.loginfo("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG'])
     logger.log("NURSES_CONFIG="+os.environ['NURSES_CONFIG'], entity='logger', level=LogLevel.DEBUG)
+    rospy.loginfo("NURSES_CONFIG="+os.environ['NURSES_CONFIG'])
     logger.log('Simulation open', entity='logger', level=LogLevel.DEBUG)
+    rospy.loginfo("Simulation open")
     logger.log('subcribing to in the topic /log', entity='logger', level=LogLevel.DEBUG)
+    rospy.loginfo("subcribing to in the topic /log")
 
-    rate = rospy.Rate(1/10) # 0.1 hz
+    rate = rospy.Rate(1.0/10.0) # 0.1 hz
     while not rospy.is_shutdown():
         # hello_str = "hello world %s" % rospy.get_time()
         # rospy.loginfo(hello_str)
@@ -109,7 +129,6 @@ def listener():
 
     logger.log('end!')
     logger.flush()
-    rospy.Timer(rospy.Duration(1), check_timeout)
 
     # spin() simply keeps python from exiting until this node is stopped
     # rospy.spin()
