@@ -112,7 +112,6 @@ def listener():
     # open file to log all received data
     # n_robots = int(os.environ['N_ROBOTS'])
     robot_subs = []
-    nurse_sub = rospy.Subscriber("/log", String, callback_log)
     rospy.loginfo("Initializing simulation logger...")
     # hold node until /clock is initialized
     while rospy.get_time() == 0:
@@ -131,6 +130,7 @@ def listener():
     rospy.loginfo("NURSES_CONFIG="+os.environ['NURSES_CONFIG'])
     logger.log('Simulation open', entity='logger', level=LogLevel.DEBUG)
     rospy.loginfo("Simulation open")
+    log_sub = rospy.Subscriber("/log", String, callback_log)
     logger.log('subcribing to in the topic /log', entity='logger', level=LogLevel.DEBUG)
     rospy.loginfo("subcribing to in the topic /log")
 
