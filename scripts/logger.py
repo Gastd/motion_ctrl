@@ -14,9 +14,11 @@ angular_sum = 0
 n_angular = 0
 log_file = None
 log_path = ""
+end_path = ""
 simulation_init_time = 0.0
 simulation_timeout_min = 15
 simulation_timeout_s = simulation_timeout_min*60
+END_KEYWORDS = ["ENDSIM","FAILURE","ENDLOWBATT","ENDTIMEOUTSIM"]
 
 class RosTimer():
     def now(self):
@@ -33,15 +35,27 @@ def formatlog(loginfo, severity):
                loginfo)
 
 def check_timeout(event):
-    global simulation_timeout_s, simulation_init_time, logger
+    global simulation_timeout_s, simulation_init_time, logger, end_path
+    # end_path = current_path + '/trial.log'
     if (rospy.get_time() - simulation_init_time) > simulation_timeout_s:
-        logger.log('ENDTIMEOUTSIM', 'logger', level=LogLevel.DEBUG)
+        logwriterend = LogWriter(end_path)
+        loggerend = Logger(logwriterend, rostimer)
+        loggerend.log('ENDTIMEOUTSIM', 'logger', level=LogLevel.DEBUG)
 
 def callback_log(data):
     global log_path, simulation_init_time, logger
     # add time since simulation init into the log
     # data.data = str(rospy.get_time() - simulation_init_time)+','+data.data
     rospy.loginfo(data.data)
+    for keyword in END_KEYWORDS:
+        if keyword in data.data:
+            logwriterend = LogWriter(end_path)
+            loggerend = Logger(logwriterend, rostimer)
+            loggerend.log(keyword, 'logger', level=LogLevel.DEBUG)
+            loggerend.flush()
+            logger.flush()
+            rospy.signal_shutdown('shutdown requested by keyword: {}'.format(keyword))
+
     try:
         logdata = json.loads(data.data)
         level_map = {
@@ -78,7 +92,7 @@ def listener():
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
     rospy.init_node('listener', anonymous=True)
-    global log_path, simulation_init_time, logger, logwriter
+    global log_path, simulation_init_time, logger, logwriter, end_path
 
     rospy.loginfo("Setting logger...")
     current_path = os.getcwd() + "/logger_sim"
@@ -90,7 +104,8 @@ def listener():
     else:
         print ("Successfully created the directory %s" % current_path)
         rospy.loginfo ("Successfully created the directory %s" % current_path)
-    log_path = current_path + "/trial.log"
+    log_path = current_path + '/{:0>2d}_{}.log'.format(trial_id, trial_code)
+    end_path = current_path + '/trial.log'
     logwriter = LogWriter(log_path)
     logger = Logger(logwriter, rostimer)
 
