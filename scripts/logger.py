@@ -104,7 +104,7 @@ def listener():
     else:
         print ("Successfully created the directory %s" % current_path)
         rospy.loginfo ("Successfully created the directory %s" % current_path)
-    log_path = current_path + '/{:0>2d}_{}.log'.format(os.environ['TRIAL'], os.environ['TRIAL_CODE'])
+    log_path = current_path + '/{:0>2d}_{}.log'.format(int(os.environ['TRIAL']), os.environ['TRIAL_CODE'])
     end_path = current_path + '/trial.log'
     logwriter = LogWriter(log_path)
     logger = Logger(logwriter, rostimer)
