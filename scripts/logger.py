@@ -84,14 +84,8 @@ def callback_log(data):
     # rospy.loginfo("ANGULAR: total = %.2f, avg_vel = %.2f, amostras = %d"%(angular_sum, (angular_sum/n_angular), n_angular))
     # rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
     
-def listener():
-
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('listener', anonymous=True)
+def logger():
+    rospy.init_node('logger', anonymous=True)
     global log_path, simulation_init_time, logger, logwriter, end_path
 
     rospy.loginfo("Setting logger...")
@@ -149,4 +143,8 @@ def listener():
     # rospy.spin()
 
 if __name__ == '__main__':
-    listener()
+    try:
+        logger()
+    except rospy.ROSInterruptException:
+        logger.log('end!')
+        logger.flush()
