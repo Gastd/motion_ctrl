@@ -97,12 +97,12 @@ int main(int argc, char** argv) {
   while(!acp->waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the move_base action server to come up");
     // log_str.data = std::getenv("ROBOT_NAME") + std::string(",") +std::to_string(ros::Time::now().toSec())+std::string(",Waiting for the move_base action server to come up");
-    log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", "Waiting for the move_base action server to come up", "");
+    log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", "Waiting for the move_base action server to come up", "None");
     log_pub.publish(log_str);
   }
 
   // log_str.data = std::getenv("ROBOT_NAME") + std::string(",") +std::to_string(ros::Time::now().toSec())+std::string(",Move_base is up and ok....");
-  log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", "Move_base is up and ok....", "");
+  log_str.data = formatlog("debug", std::getenv("ROBOT_NAME"), "move-base-info", "Move_base is up and ok....", "None");
   log_pub.publish(log_str);
   // log_str.data = std::getenv("ROBOT_NAME") + std::string(",") +std::to_string(ros::Time::now().toSec())+std::string(",STARTSIM");
   // log_pub.publish(log_str);
