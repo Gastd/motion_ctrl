@@ -3,6 +3,6 @@
   <!-- Move Base Flex -->
   <param name="/use_sim_time" value="true"/>
   
-  <node pkg="motion_ctrl" type="logger.py" name="logger" output="screen" />
+  <node pkg="motion_ctrl" type="logger.py" name="logger" output="screen" required="true" />
   <!-- <node pkg="rosbag" type="record" name="record" output="screen" args="-a -o /root/.ros/logger_sim/trial$(env TRIAL)"/> -->
 </launch>
