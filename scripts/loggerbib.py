@@ -67,11 +67,21 @@ class Logger:
     def __init__(self, log_writer, timer, default_level = LogLevel.DEBUG):
         self.log_queue = []
         self.timer, self.log_writer, self.default_level = timer, log_writer, default_level
-        
+        self.last_to_search = 5
+
     def log(self, content, entity = None, level=None):
         level = level if level else self.default_level
-        time = self.timer.now()
-        self.log_queue.append(LogEntry(time, level, entity, obj_to_string(content)))
+        if not self.search_if_log_exists(content):
+            time = self.timer.now()
+            self.log_queue.append(LogEntry(time, level, entity, obj_to_string(content)))
+        else:
+            return
+
+    def search_if_log_exists(self, content):
+        for log in self.log_queue[-self.last_to_search:]:
+            if content == log:
+                return True
+        return False
 
     def flush(self):
         if not self.log_queue:
