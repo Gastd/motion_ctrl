@@ -17,16 +17,34 @@ simulation_timeout_s = simulation_timeout_min*60
 END_KEYWORDS = ["ENDSIM","FAILURE","ENDLOWBATT","ENDTIMEOUTSIM"]
 logwriter = None
 logger = None
+debugger_logger = None
+
+class DebugTimer():
+    def now(self):
+        return 0.0
+
+debugtimer = DebugTimer()
 
 class RosTimer():
+    def __init__(self):
+        self.simulation_init_time = None
+
+    def set_init_time(self, time):
+        self.simulation_init_time = time
+
     def now(self):
-        return rospy.get_time() - simulation_init_time
+        try:
+            return rospy.get_time() - self.simulation_init_time
+        except:
+            debug_str = 'RosTimer tried to access not available time'
+            print(debug_str)
+            debugger_logger.log(debug_str, 'logger', level=LogLevel.ERROR)
 
 rostimer = RosTimer()
 
 def check_timeout(event):
     global simulation_timeout_s, simulation_init_time, logger, end_path
-    if (rospy.get_time() - simulation_init_time) > simulation_timeout_s:
+    if rostimer.now() > simulation_timeout_s:
         logwriterend = LogWriter(end_path)
         loggerend = Logger(logwriterend, rostimer)
         loggerend.log('ENDTIMEOUTSIM', 'logger', level=LogLevel.DEBUG)
@@ -73,6 +91,7 @@ def logger():
     end_path = current_path + '/trial.log'
     logwriter = LogWriter(log_path)
     logger = Logger(logwriter, rostimer)
+    debugger_logger = Logger(logwriter, debugtimer)
 
     # open file to log all received data
     robot_subs = []
@@ -82,8 +101,9 @@ def logger():
         rospy.logwarn("Waiting for clock...")
         rospy.sleep(0.1)
     
-    rospy.Timer(rospy.Duration(1), check_timeout)
+    rostimer.set_init_time(rospy.get_time())
     simulation_init_time = rospy.get_time() # time in secs
+    rospy.Timer(rospy.Duration(1), check_timeout)
 
     logger.log("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG'], entity='logger', level=LogLevel.DEBUG)
     rospy.loginfo("ROBOTS_CONFIG="+os.environ['ROBOTS_CONFIG'])
